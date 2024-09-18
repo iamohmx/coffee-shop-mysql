@@ -46,10 +46,10 @@ class _CoffeePageState extends State<CoffeePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Coffee Menu"),
+        title: const Text("Coffee Menu"),
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: GridView.builder(
           itemCount: coffeeImages.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,7 +75,7 @@ class _CoffeePageState extends State<CoffeePage> {
                 },
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Image.asset(
@@ -84,10 +84,10 @@ class _CoffeePageState extends State<CoffeePage> {
                       width: double.infinity,
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Text(
                         coffeeName[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black,
                             fontSize: 13,
                             fontWeight: FontWeight.w500),
