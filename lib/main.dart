@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:project01/routes/coffeePage.dart";
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 void main(){
   // call statelessWidget
@@ -37,10 +39,52 @@ class _CoffeeShopState extends State<CoffeeShop> {
 
   bool hidePassword = true;
 
-  var tblogin = ["test","1234"];
-
   TextEditingController us = TextEditingController();
   TextEditingController pw = TextEditingController();
+
+  var resultLogin = '', login = '';
+
+  final IP = '192.168.1.35';
+
+  void checkLogin(String username, String password) async {
+    try {
+      String url = "http://${IP}/cooffeeshop/login.php?us=$username&pw=$password";
+
+      print(url);
+      var response = await http.get(Uri.parse(url), headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json',
+        'Charset': 'utf-8'
+      });
+      if (response.statusCode == 200) {
+        var rs = response.body.replaceAll('ï»¿', '');
+        var rsLogin = convert.jsonDecode(rs);
+
+        setState(() {
+          login = rsLogin['login'];
+          if (login.contains('OK')) {
+            // resultLogin = 'Login ถูกต้อง';
+              Navigator.push(context, 
+                MaterialPageRoute(builder: 
+                (context) => CoffeePage(),
+                )
+              );
+          } else {
+            // resultLogin = 'Login ผิดพลาด';
+            showAlert(context, "Username Or Password Wrong Or Somthing else!", "Hello Baby Check Username Or Password Again!");
+
+
+          }
+        });
+        
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        throw Exception('Failed to load Data');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
   void showAlert(BuildContext context, String t, String msg){
@@ -136,19 +180,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
                       if(us.text.isEmpty || pw.text.isEmpty) {
                         showAlert(context, "Username Or Password Is Empty", "Hello Baby Should Enter Your Username And Password!");
                       } else {
-                        
-                        if(tblogin[0].contains(us.text) && tblogin[1].contains(pw.text)) {
-                          // pass
-                          Navigator.push(context, 
-                            MaterialPageRoute(builder: 
-                            (context) => CoffeePage(),
-                            )
-                          );
-
-                        } else {
-                          // cant pass
-                          showAlert(context, "Username Or Password Wrong Or Somthing else!", "Hello Baby Check Username Or Password Again!");
-                        }
+                        checkLogin(us.text, pw.text);
                       }
 
                     });
