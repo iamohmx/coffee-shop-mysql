@@ -4,9 +4,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class CoffeePage extends StatefulWidget {
-  const CoffeePage({super.key, required this.username});
+  const CoffeePage({super.key, required this.username, required this.user_id});
 
   final String username;
+  final int user_id;
 
   @override
   State<CoffeePage> createState() => _CoffeePageState();
@@ -102,6 +103,7 @@ class _CoffeePageState extends State<CoffeePage> {
                         pro_price: pro_price[index],
                         pro_image: pro_image[index],
                         username: widget.username,
+                        user_id: widget.user_id,
                       ),
                     ),
                   );

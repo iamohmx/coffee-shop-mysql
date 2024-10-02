@@ -46,7 +46,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
 
   final IP = '10.34.5.12';
 
-  void checkLogin(String username, String password) async {
+  void checkLogin(String username, String password, String user_id) async {
     try {
       String url = "http://${IP}/coffeeshop/login.php?us=$username&pw=$password";
 
@@ -71,7 +71,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CoffeePage(username: us.text,),
+                  builder: (context) => CoffeePage(username: us.text, user_id: rsLogin['user_id']),
                 )
               );
 
@@ -190,7 +190,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
                         showAlert(context, "Username Or Password Is Empty",
                             "Hello Baby Should Enter Your Username And Password!");
                       } else {
-                        checkLogin(us.text, pw.text);
+                        checkLogin(us.text, pw.text, '');
                       }
                     });
                   },
