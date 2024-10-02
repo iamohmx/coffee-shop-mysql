@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project01/routes/coffeeDetail.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class CoffeePage extends StatefulWidget {
   const CoffeePage({super.key});
@@ -10,89 +11,114 @@ class CoffeePage extends StatefulWidget {
 }
 
 class _CoffeePageState extends State<CoffeePage> {
+  var pro_id = [];
+  var pro_name = [];
+  var pro_price = [];
+  var pro_image = [];
+  var pro_desc = [];
 
-  var coffeePrice = [
-    100,120,255,95,65,
-    150,250,120,150,50,
-  ];
+  final IP = '10.34.5.12';
 
-  var coffeeImages = [
-    "coffeeimages/00.png",
-    "coffeeimages/11.jpg",
-    "coffeeimages/22.jpg",
-    "coffeeimages/33.jpg",
-    "coffeeimages/44.jpg",
-    "coffeeimages/55.jpg",
-    "coffeeimages/66.jpg",
-    "coffeeimages/77.jpg",
-    "coffeeimages/88.jpg",
-    "coffeeimages/99.png",    
-  ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProducts();
+  }
 
-  var coffeeName = [
-    'กาแฟมอคค่า',
-    'กาแฟดอกไม้',
-    'กาแฟแมวยิ้ม',
-    'กาแฟกระต่ายอ้วน',
-    'กาแฟหมาโดนหยิก',
-    'กาแฟแมวอินเลิฟ',
-    'กาแฟแมวกินพิซซ่า',
-    'กาแฟแมวงง',
-    'กาแฟแมวอ้าปาก',
-    'กาแฟร้อน',
-  ];
+  void getProducts() async {
+    try {
+      String url = "http://${IP}/coffeeshop/getProducts.php";
+
+      print(url);
+      var response = await http.get(Uri.parse(url), headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json',
+        'Charset': 'utf-8'
+      });
+      if (response.statusCode == 200) {
+        var rs = response.body.replaceAll('ï»¿', '');
+        var productData = convert.jsonDecode(rs);
+
+        productData.forEach((item) {
+            // setState(() {
+              pro_id.add(item['pro_id']);
+              pro_name.add(item['pro_name']);
+              pro_price.add(item['pro_price']);
+              pro_image.add(item['pro_image']);
+              // pro_desc.add(item['pro_desc']);
+            // });
+          });
+          print(productData);
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        throw Exception('Failed to load Data');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+ 
+  //   'กาแฟมอคค่า',
+  //   'กาแฟดอกไม้',
+  //   'กาแฟแมวยิ้ม',
+  //   'กาแฟกระต่ายอ้วน',
+  //   'กาแฟหมาโดนหยิก',
+  //   'กาแฟแมวอินเลิฟ',
+  //   'กาแฟแมวกินพิซซ่า',
+  //   'กาแฟแมวงง',
+  //   'กาแฟแมวอ้าปาก',
+  //   'กาแฟร้อน',
+  // ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Coffee Menu"),
+        title: const Text("Coffee Menu"),
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: GridView.builder(
-          itemCount: coffeeImages.length,
+          itemCount: pro_id.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 1,
               childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height / 2)),
+                  (MediaQuery.of(context).size.height)),
           itemBuilder: (BuildContext context, int index) {
             return Card(
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context) => 
-                      CoffeeDetail(
-                        img: coffeeImages[index], 
-                        cname: coffeeName[index], 
-                        cost: coffeePrice[index],
-                        id: index,
-                        ),
-                      )
-                  );
+                  // ----------------------------------------------
+                  
                 },
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
-                    ),
-                    Image.asset(
-                      coffeeImages[index],
-                      height: 60,
-                      width: double.infinity,
+                    ), 
+                    Text(pro_id[index]),
+                    // Text()
+                    Image.network(
+                      'http://${IP}/coffeeshop/${pro_image[index]}',
+                      // pro_image[index],
+                      height: 280, width: 120, 
+                      // fit: BoxFit.cover,
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Text(
-                        coffeeName[index],
-                        style: TextStyle(
+                        pro_name[index],
+                        style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 13,
+                            fontSize: 15,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
+                    Text(pro_name[index]),
+                    Text('${pro_price[index]} Baht'),
+                    // Text(pro_desc[index]),
+                    
                     
                   ],
                 ),

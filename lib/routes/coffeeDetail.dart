@@ -33,10 +33,10 @@ class _CoffeeDetailState extends State<CoffeeDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.cname}"),
+        title: Text(widget.cname),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Image.asset(widget.img, 
@@ -44,15 +44,15 @@ class _CoffeeDetailState extends State<CoffeeDetail> {
             height: 400,
             ),
 
-            Text('${detail[widget.id]}',
+            Text(detail[widget.id],
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
             ),
 
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child: Text('${widget.cost} Baht', 
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.brown,
                 fontWeight: FontWeight.bold,
                 fontSize: 20
