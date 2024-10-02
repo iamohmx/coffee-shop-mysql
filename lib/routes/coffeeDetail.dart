@@ -14,7 +14,8 @@ class CoffeeDetail extends StatefulWidget {
 }
 
 class _CoffeeDetailState extends State<CoffeeDetail> {
-  final IP = '10.34.5.12';
+  // final IP = '10.34.5.12';
+  final IP = '192.168.1.46';
 
   void InsertOrder(String user_id, String pro_id, String order_qty) async {
     try {
@@ -29,6 +30,7 @@ class _CoffeeDetailState extends State<CoffeeDetail> {
       if (response.statusCode == 200) {
         var rs = response.body.replaceAll('ï»¿', '');
         var rsInsert = convert.jsonDecode(rs);
+
         String resultInsert = rsInsert['order'];
 
         if (resultInsert.contains('OK')) {
@@ -36,10 +38,6 @@ class _CoffeeDetailState extends State<CoffeeDetail> {
         } else {
           print('Insert Order Failed!');
         }
-
-        setState(() {
-          InsertOrder(user_id, pro_id, order_qty);
-        });
 
       } else {
         print('Request failed with status: ${response.statusCode}.');
@@ -128,7 +126,7 @@ class _CoffeeDetailState extends State<CoffeeDetail> {
                 color: Color.fromARGB(255, 2, 161, 10),
                 child: ListTile(
                   onTap: () {
-                    
+                    InsertOrder(widget.user_id, widget.pro_id, order_qty.toString());
                   },
                   title:  Center(
                     child: Text("ยืนยันคำสั่งซื้อ", style: TextStyle(color: Colors.yellow,),),

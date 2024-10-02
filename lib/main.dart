@@ -41,9 +41,10 @@ class _CoffeeShopState extends State<CoffeeShop> {
   
   var resultLogin = '', login = '', st = '';
 
-  final IP = '10.34.5.12';
+  // final IP = '10.34.5.12';
+  final IP = '192.168.1.46';
 
-  void checkLogin(String username, String password, String user_id) async {
+  void checkLogin(String username, String password) async {
     try {
       String url = "http://${IP}/coffeeshop/login.php?us=$username&pw=$password";
 
@@ -60,18 +61,18 @@ class _CoffeeShopState extends State<CoffeeShop> {
         setState(() {
           login = rsLogin['login'];
           if (login.contains('OK')) {
-
             st = rsLogin['status'];
-
             if(st.contains('user')) {
-
+              int userId = int.parse(rsLogin['user_id']);
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CoffeePage(username: us.text, user_id: rsLogin['user_id']),
+                  builder: (context) => CoffeePage(
+                    username: us.text,
+                    user_id: userId.toString(),
+                  ),
                 )
               );
-
             } else {
               // admin page....
               Navigator.push(
@@ -80,12 +81,10 @@ class _CoffeeShopState extends State<CoffeeShop> {
                   builder: (context) => const AdminPage(),
               ));
             }
-            // resultLogin = 'Login ถูกต้อง';
           } else {
-            // resultLogin = 'Login ผิดพลาด';
             showAlert(
               context,
-              "Username Or Password Wrong Or Somthing else!",
+              "Username Or Password Wrong Or Something else!",
               "Hello Baby Check Username Or Password Again!"
             );
           }
@@ -98,51 +97,6 @@ class _CoffeeShopState extends State<CoffeeShop> {
       print(e);
     }
   }
-
-  var resultLogin = '', login = '';
-
-  final IP = '192.168.1.35';
-
-  void checkLogin(String username, String password) async {
-    try {
-      String url = "http://${IP}/cooffeeshop/login.php?us=$username&pw=$password";
-
-      print(url);
-      var response = await http.get(Uri.parse(url), headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Accept': 'application/json',
-        'Charset': 'utf-8'
-      });
-      if (response.statusCode == 200) {
-        var rs = response.body.replaceAll('ï»¿', '');
-        var rsLogin = convert.jsonDecode(rs);
-
-        setState(() {
-          login = rsLogin['login'];
-          if (login.contains('OK')) {
-            // resultLogin = 'Login ถูกต้อง';
-              Navigator.push(context, 
-                MaterialPageRoute(builder: 
-                (context) => CoffeePage(),
-                )
-              );
-          } else {
-            // resultLogin = 'Login ผิดพลาด';
-            showAlert(context, "Username Or Password Wrong Or Somthing else!", "Hello Baby Check Username Or Password Again!");
-
-
-          }
-        });
-        
-      } else {
-        print('Request failed with status: ${response.statusCode}.');
-        throw Exception('Failed to load Data');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
 
   void showAlert(BuildContext context, String t, String msg) {
     showDialog(
@@ -231,7 +185,7 @@ class _CoffeeShopState extends State<CoffeeShop> {
                         showAlert(context, "Username Or Password Is Empty",
                             "Hello Baby Should Enter Your Username And Password!");
                       } else {
-                        checkLogin(us.text, pw.text, '');
+                        checkLogin(us.text, pw.text);
                       }
                     });
                   },

@@ -6,8 +6,7 @@ import 'dart:convert' as convert;
 class CoffeePage extends StatefulWidget {
   const CoffeePage({super.key, required this.username, required this.user_id});
 
-  final String username;
-  final int user_id;
+  final String username, user_id;
 
   @override
   State<CoffeePage> createState() => _CoffeePageState();
@@ -22,7 +21,8 @@ class _CoffeePageState extends State<CoffeePage> {
 
   int id = 0;
 
-  final IP = '10.34.5.12';
+  // final IP = '10.34.5.12';
+  final IP = '192.168.1.46';
 
   @override
   void initState() {
@@ -103,7 +103,7 @@ class _CoffeePageState extends State<CoffeePage> {
                         pro_price: pro_price[index],
                         pro_image: pro_image[index],
                         username: widget.username,
-                        user_id: widget.user_id,
+                        user_id: widget.user_id.toString()
                       ),
                     ),
                   );
