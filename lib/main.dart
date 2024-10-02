@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:project01/admin.dart';
 import "package:project01/routes/coffeePage.dart";
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -41,13 +42,13 @@ class _CoffeeShopState extends State<CoffeeShop> {
   TextEditingController us = TextEditingController();
   TextEditingController pw = TextEditingController();
   
-  var resultLogin = '', login = '';
+  var resultLogin = '', login = '', st = '';
 
   final IP = '10.34.5.12';
 
   void checkLogin(String username, String password) async {
     try {
-      String url = "http://${IP}/cocoffeeshop/login.php?us=$username&pw=$password";
+      String url = "http://${IP}/coffeeshop/login.php?us=$username&pw=$password";
 
       print(url);
       var response = await http.get(Uri.parse(url), headers: {
@@ -61,13 +62,27 @@ class _CoffeeShopState extends State<CoffeeShop> {
 
         setState(() {
           login = rsLogin['login'];
-          if (login.contains('ok')) {
+          if (login.contains('OK')) {
+
+            st = rsLogin['status'];
+
+            if(st.contains('user')) {
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CoffeePage(),
+              ));
+
+            } else {
+              // admin page....
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AdminPage(),
+              ));
+            }
             // resultLogin = 'Login ถูกต้อง';
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CoffeePage(),
-            ));
           } else {
             // resultLogin = 'Login ผิดพลาด';
             showAlert(
