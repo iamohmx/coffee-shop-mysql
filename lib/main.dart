@@ -36,9 +36,6 @@ class CoffeeShop extends StatefulWidget {
 
 class _CoffeeShopState extends State<CoffeeShop> {
   bool hidePassword = true;
-
-  // var tblogin = ["test","1234"];
-  
   TextEditingController us = TextEditingController();
   TextEditingController pw = TextEditingController();
   
@@ -92,6 +89,50 @@ class _CoffeeShopState extends State<CoffeeShop> {
             );
           }
         });
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        throw Exception('Failed to load Data');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  var resultLogin = '', login = '';
+
+  final IP = '192.168.1.35';
+
+  void checkLogin(String username, String password) async {
+    try {
+      String url = "http://${IP}/cooffeeshop/login.php?us=$username&pw=$password";
+
+      print(url);
+      var response = await http.get(Uri.parse(url), headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json',
+        'Charset': 'utf-8'
+      });
+      if (response.statusCode == 200) {
+        var rs = response.body.replaceAll('ï»¿', '');
+        var rsLogin = convert.jsonDecode(rs);
+
+        setState(() {
+          login = rsLogin['login'];
+          if (login.contains('OK')) {
+            // resultLogin = 'Login ถูกต้อง';
+              Navigator.push(context, 
+                MaterialPageRoute(builder: 
+                (context) => CoffeePage(),
+                )
+              );
+          } else {
+            // resultLogin = 'Login ผิดพลาด';
+            showAlert(context, "Username Or Password Wrong Or Somthing else!", "Hello Baby Check Username Or Password Again!");
+
+
+          }
+        });
+        
       } else {
         print('Request failed with status: ${response.statusCode}.');
         throw Exception('Failed to load Data');
