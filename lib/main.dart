@@ -71,8 +71,9 @@ class _CoffeeShopState extends State<CoffeeShop> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CoffeePage(),
-              ));
+                  builder: (context) => CoffeePage(username: us.text,),
+                )
+              );
 
             } else {
               // admin page....

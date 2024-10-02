@@ -4,7 +4,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class CoffeePage extends StatefulWidget {
-  const CoffeePage({super.key});
+  const CoffeePage({super.key, required this.username});
+
+  final String username;
 
   @override
   State<CoffeePage> createState() => _CoffeePageState();
@@ -16,6 +18,8 @@ class _CoffeePageState extends State<CoffeePage> {
   var pro_price = [];
   var pro_image = [];
   var pro_desc = [];
+
+  int id = 0;
 
   final IP = '10.34.5.12';
 
@@ -89,8 +93,18 @@ class _CoffeePageState extends State<CoffeePage> {
             return Card(
               child: InkWell(
                 onTap: () {
-                  // ----------------------------------------------
-                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CoffeeDetail(
+                        pro_id: pro_id[index],
+                        pro_name: pro_name[index],
+                        pro_price: pro_price[index],
+                        pro_image: pro_image[index],
+                        username: widget.username,
+                      ),
+                    ),
+                  );
                 },
                 child: Column(
                   children: [
@@ -118,14 +132,33 @@ class _CoffeePageState extends State<CoffeePage> {
                     Text(pro_name[index]),
                     Text('${pro_price[index]} Baht'),
                     // Text(pro_desc[index]),
-                    
-                    
                   ],
                 ),
               ),
             );
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 134, 114, 87),
+        selectedItemColor: Color.fromARGB(255, 255, 255, 255),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        currentIndex: id,
+        onTap: (value) {
+          setState(() {
+            id = value;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.payment),
+            label: 'Checkout',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+        ],
       ),
     );
   }
