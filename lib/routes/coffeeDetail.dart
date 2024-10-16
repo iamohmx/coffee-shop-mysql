@@ -15,38 +15,47 @@ class CoffeeDetail extends StatefulWidget {
 
 class _CoffeeDetailState extends State<CoffeeDetail> {
   // final IP = '10.34.5.12';
-  final IP = '192.168.1.46';
+  final IP = '192.168.210.230';
 
-  void InsertOrder(String user_id, String pro_id, String order_qty) async {
-    try {
-      String url = 'http://$IP/coffeeshop/insertOrder.php?user_id=$user_id&pro_id=$pro_id&order_qty=$order_qty';
+  bool isLoading = false;
 
-      print(url);
-      var response = await http.get(Uri.parse(url), headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Accept': 'application/json',
-        'Charset': 'utf-8'
-      });
-      if (response.statusCode == 200) {
-        var rs = response.body.replaceAll('ï»¿', '');
-        var rsInsert = convert.jsonDecode(rs);
+void InsertOrder(String user_id, String pro_id, String order_qty) async {
+  setState(() {
+    isLoading = true;
+  });
 
-        String resultInsert = rsInsert['order'];
+  try {
+    String url = 'http://${IP}/coffeeshop/insertOrder.php?user_id=$user_id&pro_id=$pro_id&order_qty=$order_qty';
+    var response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Accept': 'application/json',
+      'Charset': 'utf-8'
+    });
+    if (response.statusCode == 200) {
+      var rs = response.body.replaceAll('ï»¿', '');
+      var rsInsert = convert.jsonDecode(rs);
 
-        if (resultInsert.contains('OK')) {
-          print('Insert Order Successfully!');
-        } else {
-          print('Insert Order Failed!');
-        }
+      String resultInsert = rsInsert['order'];
 
+      if (resultInsert.contains('OK')) {
+        print('Insert Order Successfully!');
       } else {
-        print('Request failed with status: ${response.statusCode}.');
-        throw Exception('Failed to load Data');
+        print('Insert Order Failed!');
       }
-    } catch (e) {
-      print(e);
+
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+      throw Exception('Failed to load Data');
     }
+  } catch (e) {
+    print(e);
+  } finally {
+    setState(() {
+      isLoading = false;
+    });
   }
+}
+
   // var detail = [
   //   'มอคค่า อร่อยจริง ให้เยอะ NO.1',
   //   'กาแฟดอกไม้ อร่อยจริง ให้เยอะ NO.1',
