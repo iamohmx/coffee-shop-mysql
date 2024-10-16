@@ -16,9 +16,7 @@ class _CustomerPageState extends State<CustomerPage> {
         centerTitle: true,
       ),
       body: Container(
-        child: const Center(
-          child: Text('Customer Page'),
-        ),
+        color:  Color.fromARGB(255, 225, 212, 68),
       ),
     );
   }

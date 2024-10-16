@@ -53,6 +53,7 @@ class _OrderPageState extends State<OrderPage> {
         centerTitle: true,
       ),
       body: Container(
+        color: Color.fromARGB(255, 84, 116, 255),
         padding: const EdgeInsets.all(10),
         child: GridView.builder(
           itemCount: orders.length, // ใช้ความยาวของ orders
@@ -102,7 +103,7 @@ class _OrderPageState extends State<OrderPage> {
                       Text('ราคา : ${price.toStringAsFixed(2)} บาท'),
                       Text('จำนวน : ${order['order_qty']}'),
                       Text('ยอดรวม : ${total.toStringAsFixed(2)} บาท'),
-                      Text('ลูกค้า : ${order['username']}'),
+                      Text('ลูกค้า : ${order['firstname']} ${order['lastname']}'),
                       Text('วันที่ : ${order['ordertime']}'),
                     ],
                   ),
